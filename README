@@ -1,0 +1,35 @@
+# PREPARING FOR TECHNICAL INTERVIEWS
+
+Preparing for technical interviews requires moving away from memorizing "tricks" and moving toward a First Principles approach. Think of a LeetCode problem not as a coding puzzle, but as a transformation function where you must map an input state to an output state using the most efficient constraints.
+
+############ Phase 1: The Formal Definition (The "What") ############
+
+Before writing code, you must define the problem as a mathematical function. This prevents "coding by coincidence."
+1. Define the Domain ($I$) and Codomain ($O$): What is the exact shape of the input and output? (e.g., Is the input a set, a sequence, or a directed graph?)
+2. Identify Constraints ($C$): Look at the input size ($n$). This mathematically dictates your required time complexity:
+    - $n \approx 10^2 -> O(n^3)$ (Nested loops)
+    - $n \approx 10^3 -> O(n^2)$ (Quadratic/Nested loops)
+    - $n \approx 10^5 -> O(n log n)$ or $O(n)$ (Sorting, Heaps, Two Pointers)
+    - $n \approx 10^9 -> O(log n)$ or $O(1)$ (Binary Search, Math)
+3. State the Invariant: What must remain true throughout the entire process? (e.g., "The window sum must always be less than or equal to k$").
+
+############ Phase 2: The Logic Reduction (The "How") ############
+
+Most problems boil down to a search or a transformation. Use this decision tree to find the "Mathematical Pattern":
+
+1. Is it a Search in a Linear Space? 
+If you are looking for an element or a range in a sequence:
+    - Contiguous/Ordered? $\rightarrow$ Sliding Window or Two Pointers.
+    - Sorted? $\rightarrow$ Binary Search.
+    - Finding K-elements? $\rightarrow$ Heap (Priority Queue).
+
+2. Is it a Search in a Non-Linear Space?
+If the data points are connected by relationships:
+    - Hierarchical? $\rightarrow$ Trees (Recursion/DFS).
+    - Cyclic/Interconnected? $\rightarrow$ Graphs (BFS for shortest path, DFS for connectivity).
+
+3. Is it an Optimization Problem?
+If you see words like "Maximum," "Minimum," or "Shortest":
+    - Can it be broken into sub-problems? $\rightarrow$ Dynamic Programming or Greedy?
+
+                                                   
