@@ -1,0 +1,99 @@
+Let’s apply the **First Principles Mathematical Framework** to **LeetCode 567: Permutation in String**. This is a classic "mapping" problem that tests your ability to define equality between sets.
+
+---
+
+## Phase 1: The Formal Definition
+
+1. **Domain ():** Two strings,  and .
+2. **Codomain ():** A Boolean (`True` or `False`).
+3. **Constraints:** . This is small enough that an  or  solution will be extremely efficient.
+4. **The Invariant (The Mathematical Core):** What is a permutation mathematically? A string  is a permutation of  if and only if the **frequency counts** of all characters in  are identical to the frequency counts in .
+Let  be a function that returns a frequency vector of length 26. We are looking for a substring  in  such that:
+
+
+
+Since all permutations of  must have the same length as , the length of our window () is fixed: .
+
+---
+
+## Phase 2: Logic Reduction
+
+* **Type of Problem:** Fixed-Size Sliding Window.
+* **Why?** We know exactly how long the substring must be (). We just need to slide that window across  and check the frequency map at each step.
+* **Mathematical Equality:** Instead of comparing strings (which takes ), we compare frequency maps (which takes ).
+
+---
+
+## Phase 3: The Mathematical Formula (Induction)
+
+* **Initial State ():** Build the frequency map for  and the first  characters of .
+* **Transition ():** When we move the window one step to the right:
+1. **Add** the new character: .
+2. **Remove** the old character: .
+3. **Compare:** Is ?
+
+
+
+---
+
+## Phase 4: Implementation (Python)
+
+We will use an array of size 26 to represent the frequency vector, as it is mathematically more direct than a hash map for lowercase English letters.
+
+```python
+def checkInclusion(s1: str, s2: str) -> bool:
+    n1, n2 = len(s1), len(s2)
+    if n1 > n2:
+        return False
+
+    # 1. Define the target frequency vector (The Math Core)
+    s1_counts = [0] * 26
+    s2_counts = [0] * 26
+    
+    # Fill initial window and target
+    for i in range(n1):
+        # ord(char) - ord('a') maps 'a'-'z' to 0-25
+        s1_counts[ord(s1[i]) - ord('a')] += 1
+        s2_counts[ord(s2[i]) - ord('a')] += 1
+
+    # 2. Check the initial state
+    if s1_counts == s2_counts:
+        return True
+
+    # 3. Slide the window (Inductive Step)
+    # Start from index n1 and move to the end of s2
+    for i in range(n1, n2):
+        # Add the character entering the window
+        s2_counts[ord(s2[i]) - ord('a')] += 1
+        # Remove the character leaving the window
+        s2_counts[ord(s2[i - n1]) - ord('a')] -= 1
+        
+        # Check equality of the frequency vectors
+        if s1_counts == s2_counts:
+            return True
+
+    return False
+
+```
+
+---
+
+## Drill-Down: How to Attack each "Type"
+
+Based on our process, here is how you identify and "attack" the common patterns you mentioned:
+
+| Problem Type | Detection Signal | Mathematical Attack Vector |
+| --- | --- | --- |
+| **Two Pointer** | Searching for pairs or "squeezing" a range. | Define pointers  and . Establish a movement rule based on . |
+| **Sliding Window** | Substrings, subarrays, "contiguous" elements. | Define the **Invariant** (). Use  to expand,  to shrink. |
+| **Binary Search** | Sorted input OR a "Monotonic" answer space. | Find the "Switch Point" where the condition changes from True to False. |
+| **Trees/Graphs** | Hierarchical or connected data. | **DFS** for exhaustive state/paths; **BFS** for shortest distance/layers. |
+| **Stacks** | "Next Greater Element" or nested structures (brackets). | **Monotonic Stack:** Maintain a stack that is always sorted to find the nearest larger/smaller neighbor. |
+| **Arrays/Strings** | General manipulation. | Use **Prefix Sums** for range queries or **Frequency Maps** for counting. |
+
+### Pro-Tip for Interviews:
+
+If you get stuck on the "Formula," **draw the state.** 1. Draw the array.
+2. Draw the pointers at .
+3. Draw the pointers at .
+Ask yourself: "What exactly changed in the data between these two steps?" That change is your formula.
