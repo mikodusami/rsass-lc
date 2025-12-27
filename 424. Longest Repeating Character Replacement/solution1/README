@@ -1,0 +1,72 @@
+## Phase 1: The Formal Definition
+
+1. **Domain ():** A string  of length  () and an integer .
+2. **Codomain ():** An integer representing the maximum length of a valid substring.
+3. **Constraints:**  tells us we need an  or  solution. A nested  loop will time out.
+4. **The Invariant (The Mathematical Core):** For any substring of length , let  be the frequency of the most common character in that substring. The number of characters we need to "replace" to make the entire substring uniform is:
+
+
+
+To be a valid solution, we must satisfy:
+
+
+
+---
+
+## Phase 2: Logic Reduction
+
+* **Is it a search in linear space?** Yes, we are looking for a contiguous range (substring).
+* **Contiguous?** Yes.  **Sliding Window**.
+* **Monotonicity?** Yes. If a window of length  is valid, a smaller window within it is also valid. If a window is invalid, making it larger won't make it valid. This confirms the sliding window approach is optimal.
+
+---
+
+## Phase 3: The Mathematical Formula (Induction)
+
+We define our window by two pointers,  (left) and  (right).
+
+* **Base Case:** . The window is one character.  is always true for .
+* **Expansion ():** We include  in our frequency map and update our .
+* **Contraction ():** If the invariant  is violated, we must shrink the window from the left until the invariant is restored.
+* **Optimization Tip:** Curiously,  doesn't strictly need to be "re-calculated" by scanning the whole map when we shrink the window. We only care when  *increases*, because that's the only way to get a larger window.
+
+---
+
+## Phase 4: Implementation (Python)
+
+```python
+def characterReplacement(s: str, k: int) -> int:
+    # Mathematical State
+    count = {} # Frequency Map: maps char -> frequency in current window
+    max_freq = 0 # count_max from our formula
+    l = 0 # Left pointer
+    max_length = 0 # Our result (The Codomain)
+
+    # Iterate through the Domain using the Right pointer
+    for r in range(len(s)):
+        # 1. Update State
+        count[s[r]] = 1 + count.get(s[r], 0)
+        max_freq = max(max_freq, count[s[r]])
+
+        # 2. Check Invariant: Window Length - Max Frequency > k
+        # Current Window Length = (r - l + 1)
+        while (r - l + 1) - max_freq > k:
+            # If invalid, shrink from the left
+            count[s[l]] -= 1
+            l += 1
+        
+        # 3. Update Global Maximum
+        max_length = max(max_length, r - l + 1)
+
+    return max_length
+
+```
+
+---
+
+## Why this works (The "Attack" Summary)
+
+1. **Identification:** We identified this as a **Sliding Window** problem because we needed a "contiguous substring" and had a clear "budget constraint" ().
+2. **Formula Application:** We used the formula  to dictate exactly when to move the left pointer.
+3. **Complexity:** * **Time:**  because each pointer  only travels from  to  once.
+* **Space:**  because the hash map only stores uppercase English letters.
