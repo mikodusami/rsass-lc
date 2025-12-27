@@ -32,4 +32,41 @@ If the data points are connected by relationships:
 If you see words like "Maximum," "Minimum," or "Shortest":
     - Can it be broken into sub-problems? $\rightarrow$ Dynamic Programming or Greedy?
 
-                                                   
+############ Phase 3: The "Mathematical Formula" Tips ############
+
+If you struggle to put formulas together, use the Induction Method. Don't try to solve for n; solve for 0, then 1, then n+1.
+- The Base Case ($n=0$ or $n=1$): What is the simplest version of this problem?
+- The Transition ($i \rightarrow i+1$): If I have the answer for the first $i$ elements, how does adding the $(i+1)^{th}$ element change it?
+    - Example (Sliding Window): NewSum = OldSum + next_element - dropped_element.
+- The Pointer Relation: In two-pointer problems, define the movement. Usually:
+    - $$f(L, R) \rightarrow \text{move } R \text{ if condition } A, \text{ move } L \text{ if condition } B.$$
+
+############ Phase 4: Drilling into Specific Types ############
+
+Once you identify the "mathematical family," use these specific attack vectors:
+
+Arrays & Strings (Linear Scans): Use a Prefix Sum or Frequency Map.
+
+Sliding Window (Contiguous Ranges): Maintain a "window" that expands until a constraint is broken, then shrinks
+- Formula: $Window = [left, right]$. Expand right to increase state; increment left to decrease state.
+
+Two Pointers (Pairs/Sorting): Usually involves "squeezing" from both ends ($0$ and $n-1$) or "fast/slow" pointers to detect cycles.
+
+Binary Search (Search Space Exhaustion): It’s not just for sorted arrays. It's for any monotonic function (where the answer is "No" for a while, then switches to "Yes" forever).
+- Formula: $mid = left + \frac{right - left}{2}$.
+
+Graphs & Trees (Connectivity): 
+- BFS: Explores in "shells" (useful for shortest distance).
+- DFS: Explores paths (useful for exhaustive search/backtracking).
+- Complexity: Formula: $V + E$ (Vertices + Edges) complexity.
+
+Dynamic Programming (Recurrence): Identify the State (what variables change?) and the Relation.
+- Formula: $DP[i] = \max(DP[i-1], \text{current} + DP[i-2])$ (The classic "House Robber" recurrence).
+
+############ Summary Checklist for your Interview ############:
+1. Read: Identify the input/output and constraints.
+2. Math: Write the recurrence relation or the invariant (e.g., $i < j$ and $A[i] < A[j]$).
+3. Type: Is this a search, an optimization, or a traversal?
+4. Dry Run: Test your logic with $n=1$ and $n=2$.
+5. Code: Translate the math into logic.
+
