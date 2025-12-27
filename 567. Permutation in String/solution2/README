@@ -1,0 +1,103 @@
+To solve **LeetCode 567 (Permutation in String)** using the **Character Counts (26)** method, we refine the sliding window logic to be mathematically "constant" in terms of work per step.
+
+Instead of comparing the entire 26-length array at every iteration (), we can track a single integer representing **how many characters have matching frequencies**. This brings the transition step down to a true  operation.
+
+---
+
+## Phase 1: The Formal Definition
+
+1. **Domain ():** Strings  and .
+2. **Invariant:** We are looking for a window where the count of each of the 26 English letters matches exactly.
+3. **State Variable ():** Let  be the number of characters (out of 26) whose frequency in the current window of  exactly equals their frequency in .
+4. **Target:** We return `True` when .
+
+---
+
+## Phase 2: Logic Reduction
+
+* **Type:** Fixed Sliding Window with a "Matches" counter.
+* **The Difference:** Instead of comparing two arrays `if s1_counts == s2_counts:`, which takes 26 operations, we update the `matches` integer only for the specific character that entered and the specific character that left.
+
+---
+
+## Phase 3: The Mathematical Formula (The Transition)
+
+When a character  enters or leaves the window,  changes based on these rules:
+
+1. **When adding character :**
+* If `count[c]` *was* equal to `target[c]`,  decreases by 1 (it's no longer a match).
+* Increment `count[c]`.
+* If `count[c]` *is now* equal to `target[c]`,  increases by 1.
+
+
+2. **When removing character :**
+* If `count[c]` *was* equal to `target[c]`,  decreases by 1.
+* Decrement `count[c]`.
+* If `count[c]` *is now* equal to `target[c]`,  increases by 1.
+
+
+
+---
+
+## Phase 4: Implementation (Python)
+
+```python
+def checkInclusion(s1: str, s2: str) -> bool:
+    if len(s1) > len(s2):
+        return False
+
+    s1_counts = [0] * 26
+    s2_counts = [0] * 26
+    
+    # Initial setup for the first window
+    for i in range(len(s1)):
+        s1_counts[ord(s1[i]) - ord('a')] += 1
+        s2_counts[ord(s2[i]) - ord('a')] += 1
+
+    # Initialize matches count (0 to 26)
+    matches = 0
+    for i in range(26):
+        if s1_counts[i] == s2_counts[i]:
+            matches += 1
+
+    # Sliding the window
+    l = 0
+    for r in range(len(s1), len(s2)):
+        if matches == 26:
+            return True
+        
+        # 1. Update character entering from the RIGHT
+        idx = ord(s2[r]) - ord('a')
+        s2_counts[idx] += 1
+        if s2_counts[idx] == s1_counts[idx]:
+            matches += 1
+        elif s2_counts[idx] == s1_counts[idx] + 1:
+            matches -= 1
+            
+        # 2. Update character leaving from the LEFT
+        idx = ord(s2[l]) - ord('a')
+        s2_counts[idx] -= 1
+        if s2_counts[idx] == s1_counts[idx]:
+            matches += 1
+        elif s2_counts[idx] == s1_counts[idx] - 1:
+            matches -= 1
+            
+        l += 1
+        
+    return matches == 26
+
+```
+
+---
+
+## How to Drill into this "Attack" Vector
+
+When you are asked to optimize a "Frequency Map" problem, use these **First Principles** tips:
+
+* **The "Matches" Variable:** Instead of re-calculating the state of the whole map, only calculate the **delta** (the change).
+* **The Alphabet Constraint:** If the input is restricted (e.g., "lowercase English letters"),  is technically  space. If you see  input length, always look for this fixed-size array optimization.
+* **Window Logic:** In any sliding window problem, the formula is:
+
+
+
+Identifying the `Effect` is 90% of the work.
