@@ -1,138 +1,138 @@
-# First Principles Algorithmic Solving Framework
+# The First Principles Framework: A Beginner’s Guide to Algorithms
 
-This guide outlines a **First Principles Framework** for solving algorithmic problems. Instead of memorizing solutions or "pattern matching" (e.g., "This looks like a dynamic programming problem"), a first principles approach requires you to deconstruct the problem into its fundamental mathematical truths: **Data**, **Constraints**, and **State Transitions**.
-
----
-
-## Phase 1: Formalization (The Translation)
-
-The first principle of algorithmic solving is that code is simply a function mapping an input set to an output set. You must translate the "story" of the problem into mathematical notation.
-
-### 1. Define the Domain ($X$) and Codomain ($Y$)
-Determine exactly what the input looks like and what the output must be.
-* **Input ($X$):** Is it a set, a sequence, a graph, or a matrix?
-* **Output ($Y$):** Are you returning a boolean, a scalar (max/min), or a subset?
-
-### 2. Define the Objective Function ($f(x)$)
-Express the problem as a function to be optimized or satisfied.
-
-> **Example:** *Given an array of integers, find the contiguous subarray with the largest sum.*
-> * **Input:** Sequence $A = \{a_1, a_2, ..., a_n\}$ where $a_i \in \mathbb{Z}$.
-> * **Output:** A scalar $S_{max}$.
-> * **Objective:** Maximize $\sum_{k=i}^{j} a_k$ for some $1 \le i \le j \le n$.
-
-### 3. Identify Invariants
-What properties must remain true throughout the execution? (e.g., "The array is sorted," or "We must visit every node once").
+This guide deconstructs algorithmic problem solving. Instead of memorizing code, we focus on translating a human "story" into computer logic using four distinct phases.
 
 ---
 
-## Phase 2: Constraint Analysis (The Boundaries)
+## Phase 1: The Translation (Formalization)
+**Goal:** Stop reading the problem as a story. Start reading it as data inputs and outputs.
 
-Before thinking about *how* to solve it, you must mathematically determine the *allowable complexity*. This is derived from the Input Size ($N$).
+The first principle is that **Code is just a translation machine**. You feed it raw ingredients (Input), and it cooks a specific dish (Output).
 
-Standard competitive programming (and interview) environments allow roughly $10^8$ operations per second.
+### Step 1: Define "What I Have" (The Input Domain $X$)
+Don't just say "an array." Be specific.
+* **Data Type:** Is it a list of numbers? A string of characters? A grid (matrix)?
+* **Properties:** Are the numbers sorted? Can they be negative? Are there duplicates?
+* **Mathematical Notation:** $A = [a_1, a_2, ... a_n]$
 
+### Step 2: Define "What I Want" (The Output Codomain $Y$)
+What exactly does the function return?
+* **Decision:** True/False? (Boolean)
+* **Value:** A single number? (Integer/Float)
+* **Structure:** A list of items? (Array/List)
+* **Location:** An index or coordinate?
 
-
-![](./time-complexity-image.jpeg)
-
-
-* **If $N \le 20$:** You can use exponential time $O(2^N)$ or factorial $O(N!)$. (Likely Recursion/Backtracking).
-* **If $N \le 1000$:** You can use quadratic time $O(N^2)$. (Nested loops are okay).
-* **If $N \le 10^5$ or $10^6$:** You must use linear $O(N)$ or linearithmic $O(N \log N)$. (One pass or Sorting).
-* **If $N > 10^9$:** You must use logarithmic $O(\log N)$ or constant $O(1)$. (Binary search or Math formula).
-
-**Action:** Look at the constraints given in the problem. If $N = 10^5$, **mathematically prove to yourself** that a nested loop solution will fail (Time Limit Exceeded). This narrows your search space immediately.
+### Step 3: The "One Sentence" Goal (The Objective Function)
+Strip away the flavor text. Write one sentence that describes the relationship between Input and Output.
+* *Example Story:* "Help the thief steal the most money from houses without alerting police."
+* *Mathematical Sentence:* "Find the subset of non-adjacent numbers with the maximum sum."
 
 ---
 
-## Phase 3: Dimensionality Reduction (The Search Space)
+## Phase 2: The Budget (Constraint Analysis)
+**Goal:** Determine how "expensive" your solution is allowed to be before you write a single line of code.
 
-Most problems ask you to search for an answer within a "Search Space" (all possible valid outputs). A brute force approach checks every point in this space. Your goal is to use mathematical properties to ignore vast parts of that space.
+Computers have a speed limit (approx. $10^8$ operations per second). The size of the input ($N$) dictates which algorithms fit in your "budget."
 
-### 1. The Brute Force Formula
-Write down the naive mathematical solution.
-For the "Max Subarray" example, the search space is all pairs $(i, j)$.
-Total pairs $\approx \frac{N^2}{2}$. Summing each takes $O(N)$.
-**Total Complexity:** $O(N^3)$.
+| Input Size ($N$) | Your Time Budget | Allowable Complexity | The "Vibe" of the Solution |
+| :--- | :--- | :--- | :--- |
+| **Small** ($N \le 20$) | Unlimited | $O(2^N)$ or $O(N!)$ | You can try every combination (Recursion). |
+| **Medium** ($N \le 1,000$) | Generous | $O(N^2)$ | Nested loops (compare every item to every other item). |
+| **Large** ($N \le 10^5$) | Tight | $O(N)$ or $O(N \log N)$ | You can touch every item once, or sort them. **No nested loops.** |
+| **Huge** ($N > 10^9$) | Instant | $O(\log N)$ or $O(1)$ | You cannot even look at all inputs. Use Math or Binary Search. |
 
-### 2. Optimization via Data Structures
-We optimize by choosing a data structure that minimizes the cost of specific operations required by your objective function.
+** Beginner Tip:** If $N = 100,000$, and you write a double for-loop (`for i in arr: for j in arr:`), you have already failed. Stop and rethink.
 
-| Operation Needed | Mathematical Cost | Data Structure Choice |
+---
+
+## Phase 3: The Strategy (Dimensionality Reduction)
+**Goal:** Avoid checking every possibility (Brute Force). Find a shortcut.
+
+### Step 1: The Naive Approach (Brute Force)
+First, admit how you would solve it if you had infinite time.
+* *Thought:* "I'll check every single subarray to see which is largest."
+* *Cost:* $O(N^2)$ or $O(N^3)$.
+* *Check:* Does this fit the Phase 2 Budget? If yes, code it! If no, proceed to Step 2.
+
+### Step 2: Identify the Bottleneck
+Why is the Brute Force slow?
+* Are we re-calculating the same sum over and over?
+* Are we searching the whole list just to find one number?
+
+### Step 3: Choose the Optimization Tool
+Match your bottleneck to a specific Data Structure tool.
+
+| The Bottleneck Problem | The Mathematical Solution | The Code Tool |
 | :--- | :--- | :--- |
-| **Membership ($x \in S$?)** | $O(1)$ vs $O(N)$ | Hash Map / Hash Set |
-| **Ordering / Min-Max** | $O(1)$ vs $O(N)$ | Heap (Priority Queue) |
-| **Sequential Dependency** | LIFO / FIFO | Stack / Queue |
-| **Prefix/Suffix Algebra** | $O(1)$ Range Sum | Prefix Sum Array |
-
-### 3. Optimization via Recurrence (Inductive)
-If the problem asks for an optimal value, check if the problem has **Optimal Substructure**. Can the answer for input size $N$ be derived from the answer for input size $N-1$?
-
-$$Solve(n) = f(Solve(n-1), ...)$$
-
-* **Top-Down:** Recursion with Memoization.
-* **Bottom-Up:** Dynamic Programming (Iteration).
-
-
+| "I need to find if Item X exists quickly." | Membership Check $O(1)$ | **Hash Set / Hash Map** |
+| "I need the biggest/smallest item constantly." | Ordering $O(1)$ | **Heap (Priority Queue)** |
+| "I need to access recent history in order." | LIFO / FIFO | **Stack / Queue** |
+| "I need the sum of a specific range repeatedly." | Range Algebra | **Prefix Sum Array** |
+| "The answer for N depends on N-1." | Recurrence Relation | **Dynamic Programming** |
 
 ---
 
-## Phase 4: Algorithm Selection (The "Solver")
+## Phase 4: The Algorithm Selection (The Solver)
+**Goal:** Select the standard coding pattern that fits the data structure.
 
-Based on the mathematical structure identified in Phase 3, select the algorithmic paradigm.
-
-### A. If the Search Space is Monotonic:
-If the function $f(x)$ is increasing or decreasing (sorted), you do not need to scan linearly.
+### A. Is the input Sorted or Monotonic?
+* *Does the data go up/down consistently?*
 * **Technique:** Binary Search.
-* **Math:** Reduces search space by half each step: $N \to \frac{N}{2} \to \frac{N}{4}$.
+* **Why:** We can ignore half the data at every step.
 
-### B. If the Search Space involves Combinations/Permutations:
-If you need to explore all subsets.
-* **Technique:** Backtracking (Depth First Search).
+### B. Do we need Combinations or Permutations?
+* *Does the problem ask for "all subsets" or "all ways to arrange"?*
+* **Technique:** Backtracking (Recursion).
 
-### C. If the Search Space is Linear/Sequential:
-If you are processing a stream or array and need to maintain a "window" of state.
+### C. Are we looking for a contiguous sub-part?
+* *Are we looking for a slice of an array or string?*
 * **Technique:** Sliding Window or Two Pointers.
-* **Math:** $Left$ and $Right$ pointers move monotonically (never move backward), ensuring $O(N)$ complexity.
+* **Why:** We use pointers ($Left$ and $Right$) to slide over the data once ($O(N)$) instead of looping repeatedly.
 
-
-
-### D. If the relationships are Pairwise/Connected:
-If objects are connected to other objects.
-* **Technique:** Graph Theory (BFS/DFS).
-* **Math:** Model as $G = (V, E)$.
+### D. Is it a connection problem?
+* *Are items connected like cities on a map or friends in a network?*
+* **Technique:** BFS / DFS (Graph Theory).
 
 ---
 
 ## Example Walkthrough: Two Sum
+**Problem:** Given array `nums` and target `T`, find indices `i` and `j` where `nums[i] + nums[j] = T`.
 
-**Problem:** *Given array $A$ and target $T$, find indices $i, j$ such that $A[i] + A[j] = T$.*
-
-1.  **Formalization:** Find $(i, j)$ such that $A[i] = T - A[j]$.
-2.  **Constraints:** Assume $N = 10^5$. We need $O(N)$ or $O(N \log N)$. $O(N^2)$ is forbidden.
-3.  **Search Space:** Naive approach checks all pairs $(i, j)$. Complexity $O(N^2)$.
-4.  **Mathematical Reduction:** Fix index $i$. We are looking for a value $x = T - A[i]$ in the rest of the array. To check for existence in $O(1)$, we use a **Hash Map**.
-5.  **Solution:** Iterate $i$ from $0 \to N$. Calculate required $diff = T - A[i]$. If $diff$ exists in Hash Map $\to$ Success. Else, store $A[i]$ in Hash Map.
+1.  **Translation:**
+    * Input: Array of Ints.
+    * Goal: Find $i, j$ such that $A[i] = T - A[j]$.
+2.  **Budget:**
+    * $N = 10,000$.
+    * Budget is $O(N)$ or $O(N \log N)$. **We cannot use nested loops ($O(N^2)$).**
+3.  **Strategy:**
+    * *Naive:* Loop `i`, then Loop `j`. Too slow.
+    * *Bottleneck:* Finding the partner number ($T - A[i]$) takes too long ($O(N)$) inside the loop.
+    * *Tool:* We need fast lookups. **Use a Hash Map.**
+4.  **Algorithm:**
+    * Loop through array once.
+    * Calculate `needed_value = Target - current_value`.
+    * Ask Map: "Have we seen `needed_value`?"
+        * Yes: Return indices.
+        * No: Add `current_value` to Map and continue.
 
 ---
 
-## Summary Checklist for the Programmer
-
-When you face a new problem, do not write code immediately. Write this comment block:
+## The "New Solver" Comment Template
+Copy and paste this into your code editor at the start of every problem. Fill it out *before* writing code.
 
 ```text
-// 1. INPUT/OUTPUT:
-//    Input: [Type, Constraints]
-//    Output: [Type, Value]
-
-// 2. FORMULA:
-//    Maximize/Find f(x) where...
-
-// 3. CONSTRAINTS & COMPLEXITY:
-//    N = [Size], therefore max Time Complexity = O(...)
-
-// 4. STRATEGY:
-//    Brute force is O(...).
-//    Bottleneck is [Inner Loop / Lookup / Sorting].
-//    Optimize bottleneck using [Hash Map / Two Pointers / DP] to achieve O(...).
+// ---------------------------------------------------------
+// 1. TRANSLATION
+//    Input:  (e.g., Array of size N)
+//    Output: (e.g., Integer Sum)
+//    Goal:   (e.g., Find max sum of contiguous subarray)
+//
+// 2. BUDGET
+//    N = ...
+//    Time Limit = O(...)  --> (Can I use nested loops? Yes/No)
+//
+// 3. STRATEGY
+//    Naive Approach: Check all pairs. Cost: O(N^2). Too slow.
+//    Bottleneck:     Repeatedly searching for X.
+//    Tool:           Hash Map for O(1) lookup.
+// ---------------------------------------------------------
