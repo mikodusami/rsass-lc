@@ -122,17 +122,28 @@ Copy and paste this into your code editor at the start of every problem. Fill it
 
 ```text
 // ---------------------------------------------------------
-// 1. TRANSLATION
-//    Input:  (e.g., Array of size N)
-//    Output: (e.g., Integer Sum)
-//    Goal:   (e.g., Find max sum of contiguous subarray)
+// 1. TRANSLATION & CONSTRAINTS
+//    Input:  (e.g., String s)
+//    Output: (e.g., Boolean)
+//    Goal:   (e.g., Match nested pairs in LIFO order)
+//    Parity: (Are there math shortcuts? e.g., if len(s) % 2 != 0, return False)
 //
-// 2. BUDGET
-//    N = ...
-//    Time Limit = O(...)  --> (Can I use nested loops? Yes/No)
+// 2. BUDGET & BOUNDARIES
+//    N = ... 
+//    Time: O(...) | Space: O(...)
+//    Edge Cases to Check: 
+//       - Empty input ("")
+//       - Single element ("(")
+//       - Maximum constraints (N=10^4)
+//       - "Heavy" start (all openers) vs "Heavy" end (all closers)
 //
-// 3. STRATEGY
-//    Naive Approach: Check all pairs. Cost: O(N^2). Too slow.
-//    Bottleneck:     Repeatedly searching for X.
-//    Tool:           Hash Map for O(1) lookup.
+// 3. STRATEGY & BOTTLENECK
+//    Naive:   (e.g., Search for every matching pair. O(N^2))
+//    Pivot:   (Why is Naive bad? e.g., We lose track of nesting order)
+//    Tool:    (e.g., Stack for LIFO, Hash Map for O(1) matching)
+//
+// 4. THE STATE MACHINE (The "Human" logic)
+//    - If [Condition A]: Push to stack/Update pointer
+//    - If [Condition B]: Pop/Compare/Calculate
+//    - Final Check: (e.g., Is stack empty? Is pointer at N?)
 // ---------------------------------------------------------
